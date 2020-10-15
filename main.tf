@@ -1,5 +1,5 @@
 provider "aws" {
-  region  = "us-west-1"
+  region = var.region
 }
 
 // Generate the SSH keypair that we’ll use to configure the EC2 instance. 
@@ -8,7 +8,7 @@ provider "aws" {
 resource "tls_private_key" "key" {
   algorithm = "RSA"
 }
- 
+
 resource "local_file" "private_key" {
   filename          = "${path.module}/ec2-key.pem"
   sensitive_content = tls_private_key.key.private_key_pem
@@ -27,24 +27,25 @@ resource "aws_key_pair" "key_pair" {
 data "aws_vpc" "default" {
   default = true
 }
- 
+
+
 resource "aws_security_group" "allow_ssh" {
   vpc_id = data.aws_vpc.default.id
- 
+
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
- 
+
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
- 
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -61,12 +62,12 @@ resource "aws_security_group" "allow_ssh" {
 
 data "aws_ami" "ubuntu" {
   most_recent = true
- 
+
   filter {
     name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
- 
+
   owners = ["099720109477"]
 }
 
@@ -78,7 +79,7 @@ resource "aws_instance" "ec2_instance" {
   instance_type               = "t3.micro"
   vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
   key_name                    = aws_key_pair.key_pair.key_name
- 
+
   tags = {
     Name = "Terraform Demo Server"
   }
@@ -89,17 +90,17 @@ resource "aws_instance" "ec2_instance" {
 
 output "ec2_instance_ip" {
   description = "IP address of the EC2 instance"
-  value = aws_instance.ec2_instance.public_ip
+  value       = aws_instance.ec2_instance.public_ip
 }
 
 output "ec2_instance_public_dns" {
   description = "DNS name of the EC2 instance"
-  value = aws_instance.ec2_instance.public_dns
+  value       = aws_instance.ec2_instance.public_dns
 }
 
 output "connection_string" {
   description = "Copy/Paste/Enter - You are in the matrix"
-  value = "ssh -i ${path.module}/ec2-key.pem ${var.ec2_username}@${aws_instance.ec2_instance.public_dns}"
+  value       = "ssh -i ${path.module}/ec2-key.pem ${var.ec2_username}@${aws_instance.ec2_instance.public_dns}"
 }
 
 
