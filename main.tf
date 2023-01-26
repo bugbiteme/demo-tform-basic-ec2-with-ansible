@@ -10,9 +10,10 @@ resource "tls_private_key" "key" {
 }
 
 resource "local_file" "private_key" {
-  filename          = "${path.module}/ec2-key.pem"
-  sensitive_content = tls_private_key.key.private_key_pem
-  file_permission   = "0400"
+  filename = "${path.module}/ec2-rhel-key.pem"
+  //sensitive_content = tls_private_key.key.private_key_pem
+  content         = tls_private_key.key.private_key_pem
+  file_permission = "0400"
 }
 
 
@@ -60,21 +61,37 @@ resource "aws_security_group" "allow_ssh" {
 
 // Get latest Ubuntu AMI, so that we can configure the EC2 instance
 
-data "aws_ami" "ubuntu" {
+data "aws_ami" "rhel" {
   most_recent = true
+
+  owners = ["309956199498"]
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+    values = ["RHEL-8.4*"]
   }
 
-  owners = ["099720109477"]
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
 }
 
 // Configure the EC2 instance itself
 
 resource "aws_instance" "ec2_instance" {
-  ami                         = data.aws_ami.ubuntu.id
+  count                       = 2
+  ami                         = data.aws_ami.rhel.id
   associate_public_ip_address = true
   instance_type               = "t3.micro"
   vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
@@ -90,17 +107,19 @@ resource "aws_instance" "ec2_instance" {
 
 output "ec2_instance_ip" {
   description = "IP address of the EC2 instance"
-  value       = aws_instance.ec2_instance.public_ip
+  //value       = aws_instance.ec2_instance[0].public_ip
+  value = join("\n", aws_instance.ec2_instance[*].public_ip)
 }
 
 output "ec2_instance_public_dns" {
   description = "DNS name of the EC2 instance"
-  value       = aws_instance.ec2_instance.public_dns
+  //value       = aws_instance.ec2_instance[0].public_dns
+  value = join("\n", aws_instance.ec2_instance[*].public_dns)
 }
 
 output "connection_string" {
-  description = "Copy/Paste/Enter - You are in the matrix"
-  value       = "ssh -i ${path.module}/ec2-key.pem ${var.ec2_username}@${aws_instance.ec2_instance.public_dns}"
+  description = "Copy/Paste/Enter - You are in the matrix for first instance"
+  value       = "ssh -i ${path.module}/ec2-rhel-key.pem ${var.ec2_username}@${aws_instance.ec2_instance[0].public_dns}"
 }
 
 

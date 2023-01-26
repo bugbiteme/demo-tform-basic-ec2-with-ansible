@@ -14,7 +14,7 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| ec2\_username | The user to connect to the EC2 as | `string` | `"ubuntu"` | no |
+| ec2\_username | The user to connect to the EC2 as | `string` | `"ec2-user"` | no |
 
 ## Outputs
 
