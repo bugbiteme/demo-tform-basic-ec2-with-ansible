@@ -42,7 +42,7 @@ examples:
 Just one ec2 instance (default)  
 `sh ./provision-and-config.sh`  
   
-ec2 instances  == 3
+ec2 instances  == 3  
 `sh ./provision-and-config.sh 3`
 
 run `terraform destroy` afterwards when you are done  
