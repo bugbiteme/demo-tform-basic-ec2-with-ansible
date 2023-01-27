@@ -1,10 +1,10 @@
 
 #terraform apply -var 'instances=<number of instances>'
 if [ -z "$1" ]; then
-    echo "Creating a single EC2 Intance"
+    echo "Creating a single EC2 Instance"
     terraform apply -auto-approve
 else
-    echo "Creating $1 EC2 Intances"
+    echo "Creating $1 EC2 Instances"
     terraform apply -auto-approve  -var "instances=$1"
 fi
 
