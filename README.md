@@ -18,24 +18,24 @@ Install the following on your local system:
  - ansible (core)
 
 ## To run the terraform script on its own
-'terraform init'
-'terraform apply' (type "yes" when prompted)
+`terraform init`
+`terraform apply` (type "yes" when prompted)
 
 output shows all the public IP addresses, as well as a cli string to ssh into one of 
 them.
 
 delete everything by typing
-'terraform destroy'
+`terraform destroy`
 
 ## To run the ansible playbook
 Once your ec2 instances have been provisioned, run the command
-'ansible-playbook -i inventory playbook.yml'
+`ansible-playbook -i inventory playbook.yml`
 
 This will accomplish installing and testing httpd
 
 ## To run them on one swoop
 I have created a helper sctipt called 'provision-and-config.sh' that does it all together
 
-'sh ./provision-and-config.sh'
+`sh ./provision-and-config.sh`
 
-run 'terraform destroy' afterwards when you are done
+run `terraform destroy` afterwards when you are done
