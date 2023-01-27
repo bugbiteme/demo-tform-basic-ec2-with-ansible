@@ -36,7 +36,7 @@ This will accomplish installing and testing httpd
 ## To run them on one swoop
 I have created a helper sctipt called 'provision-and-config.sh' that does it all together  
 
-`sh ./provision-and-config.sh <optional number of instances>` 
+`sh ./provision-and-config.sh <optional number of instances>`   
 examples:  
   
 Just one ec2 instance (default)  
