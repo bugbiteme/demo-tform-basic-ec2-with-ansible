@@ -90,7 +90,7 @@ data "aws_ami" "rhel" {
 // Configure the EC2 instance itself
 
 resource "aws_instance" "ec2_instance" {
-  count                       = 2
+  count                       = var.instances
   ami                         = data.aws_ami.rhel.id
   associate_public_ip_address = true
   instance_type               = "t3.micro"
@@ -101,6 +101,13 @@ resource "aws_instance" "ec2_instance" {
     Name = "Terraform Demo Server"
   }
 
+}
+
+
+#creating ansible inventory file
+resource "local_file" "ansible_inventory" {
+  filename = "inventory"
+  content  = join("\n", aws_instance.ec2_instance[*].public_ip)
 }
 
 // Output the public_ip and the Ansible command to connect to ec2 instance

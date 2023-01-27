@@ -1,26 +1,41 @@
-## Requirements
+# Instructions
 
-No requirements.
+You can use terraform on its own to spin up a number of Red Hat Enterprise Linux 
+EC2 instances in AWS (version 8.4)
 
-## Providers
+Feel free to set the variables how you see fit
 
-| Name | Version |
-|------|---------|
-| aws | n/a |
-| local | n/a |
-| tls | n/a |
+Terraform also produces a dynamic Ansible inventory file that can be used in
+playbooks for configuring these sytems.
 
-## Inputs
+As an example, I have created a playbook that installs httpd on each new system, along
+with a hello message in index.html, diplaying the OS version
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| ec2\_username | The user to connect to the EC2 as | `string` | `"ec2-user"` | no |
+## Prerequisits
+Install the following on your local system:
+ - AWS cli
+ - terraform
+ - ansible (core)
 
-## Outputs
+## To run the terraform script on its own
+'terraform init'
+'terraform apply' (type "yes" when prompted)
 
-| Name | Description |
-|------|-------------|
-| connection\_string | Copy/Paste/Enter - You are in the matrix |
-| ec2\_instance\_ip | IP address of the EC2 instance |
-| ec2\_instance\_public\_dns | DNS name of the EC2 instance |
+output shows all the public IP addresses, as well as a cli string to ssh into one of 
+them.
 
+delete everything by typing
+'terraform destroy'
+
+## To run the ansible playbook
+Once your ec2 instances have been provisioned, run the command
+'ansible-playbook -i inventory playbook.yml'
+
+This will accomplish installing and testing httpd
+
+## To run them on one swoop
+I have created a helper sctipt called 'provision-and-config.sh' that does it all together
+
+'sh ./provision-and-config.sh'
+
+run 'terraform destroy' afterwards when you are done

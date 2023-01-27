@@ -1,0 +1,33 @@
+---
+
+- hosts: all
+  remote_user: ec2-user
+  become: true
+  tasks:
+  - name: Install httpd
+    dnf:
+      name: httpd
+      state: present
+
+  - name: Set index.html
+    copy:
+      content: "Hello from {{ ansible_distribution }} {{ ansible_distribution_version }}"
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+      
+  - name: Start httpd service
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+
+  - name: Run curl from localhost and print output
+    shell: curl localhost
+    register: curl_result
+    ignore_errors: yes
+
+  - name: Print cURL output
+    debug:
+      msg: "{{ curl_result.stdout }}"

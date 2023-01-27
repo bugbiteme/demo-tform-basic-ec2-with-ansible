@@ -9,3 +9,8 @@ variable "region" {
   description = "Select region"
   default     = "us-west-1"
 }
+
+variable "instances" {
+  type = number
+  default = 3
+}
