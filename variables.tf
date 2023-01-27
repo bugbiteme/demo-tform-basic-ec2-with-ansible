@@ -12,5 +12,5 @@ variable "region" {
 
 variable "instances" {
   type = number
-  default = 3
+  default = 1
 }

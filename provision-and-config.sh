@@ -1,4 +1,14 @@
-terraform apply -auto-approve
+
+#terraform apply -var 'instances=<number of instances>'
+if [ -z "$1" ]; then
+    echo "Creating a single EC2 Intance"
+    terraform apply -auto-approve
+else
+    echo "Creating $1 EC2 Intances"
+    terraform apply -auto-approve  -var "instances=$1"
+fi
+
+#terraform apply -auto-approve
 
 echo "Waiting 20 seconds to make sure ec2 instances are ready"
 sleep 1 && for i in {20..1}; do echo "$i" && sleep 1; done

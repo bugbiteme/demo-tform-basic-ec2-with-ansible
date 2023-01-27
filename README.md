@@ -36,6 +36,13 @@ This will accomplish installing and testing httpd
 ## To run them on one swoop
 I have created a helper sctipt called 'provision-and-config.sh' that does it all together  
 
+`sh ./provision-and-config.sh <optional number of instances>` 
+examples:  
+  
+Just one ec2 instance (default)  
 `sh ./provision-and-config.sh`  
+  
+3 ec2 instances  
+`sh ./provision-and-config.sh 2`
 
 run `terraform destroy` afterwards when you are done  
