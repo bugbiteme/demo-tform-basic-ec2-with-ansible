@@ -47,6 +47,32 @@ ec2 instances  == 3
 
 run `terraform destroy` afterwards when you are done  
 
+# For RHEL Insight Setup, run these scripts instead
+
+Additional playbooks have been added to register your EC2 instances with a RHEL subscription
+and add them to Insights inventory:  
+- `rhel-reg-insights.yml`  
+
+Usage:  
+`ansible-playbook -i inventory rhel-reg-insights.yml --vault-id @prompt`  
+  
+Note:  
+vault data set in `vars/reg-data.yml` and must be encrypted with `ansible-vault`
+
+```
+ansible-vault edit vars/reg-data.yml
+.
+.
+username: <RH Subscription Username>
+password: <RH Subscription Password>
+```
+  
+Playbook to remove EC2 instances from the Insights inventory and unregister them:  
+- `rhel-unreg-insights.yml`
+
+Scripts to provision/deprovision and register/unregister have been created as well:
+- `rhel-provision-and-register.sh`
+- `rhel-deprovision-and-unregister.sh`
 
 # Additional Notes
 
