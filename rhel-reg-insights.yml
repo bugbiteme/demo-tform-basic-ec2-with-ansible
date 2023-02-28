@@ -1,0 +1,21 @@
+---
+
+- hosts: all
+  remote_user: ec2-user
+  become: true
+  vars_files: vars/reg-data.yml
+  tasks:
+  
+  - name: Register RHEL with user/password and auto-subscribe to available content
+    redhat_subscription:
+      state: present
+      username: "{{ username }}"
+      password: "{{ password }}"
+      autosubscribe: true
+
+  # prereq - install `redhatinsights.insights` module via ansible-galaxy
+  - name: Add RHEL system to insights
+    redhatinsights.insights.insights_register:
+      state: present
+    
+

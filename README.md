@@ -46,3 +46,33 @@ ec2 instances  == 3
 `sh ./provision-and-config.sh 3`
 
 run `terraform destroy` afterwards when you are done  
+
+
+# Additional Notes
+
+## How to activate RHEL with your subscription via the command line
+
+### Prerequisites 
+- Have a valid Red Hat Subscription
+
+### Steps
+- `sudo subscription-manager register --username <username> --password <password> --auto-attach`
+
+
+## How to register your RHEL system with Red Hat Insights via the command line (RHEL 8.4)
+
+### Prerequisites  
+- Activate your RHEL (see above)
+- [Check Insights on how to add based on version of RHEL](https://console.redhat.com/insights/registration)
+
+### Steps
+- `sudo insights-client --register`
+or
+- `sudo rhc connect -u <username> -p <password>`
+
+## To unregister RHEL system with Insights (decommisioning)
+- `sudo insights-client --unregister`
+
+## To ungregister RHEL system from subscription
+- `sudo subscription-manager unregister`
+
