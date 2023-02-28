@@ -30,3 +30,5 @@ override.tf.json
 
 inventory
 
+vars/reg-data.yml
+
