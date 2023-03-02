@@ -29,6 +29,6 @@ override.tf.json
 # example: *tfplan*
 
 inventory
-
+*.pem
 vars/reg-data.yml
 
