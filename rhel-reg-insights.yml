@@ -13,9 +13,27 @@
       password: "{{ password }}"
       autosubscribe: true
 
+  - name: Install yara package for malware detection
+    ansible.builtin.dnf:
+      name: 'yara'
+      state: latest
+
   # prereq - install `redhatinsights.insights` module via ansible-galaxy
   - name: Add RHEL system to insights
     redhatinsights.insights.insights_register:
       state: present
+
+  - name: Run Insights test malware scan 
+    ansible.builtin.command: sudo insights-client --collector malware-detection
+
+  - name: Enable scanning, set test_scan false in /etc/insights-client/malware-detection-config.yml
+    ansible.builtin.replace:
+      path: /etc/insights-client/malware-detection-config.yml
+      regexp: "test_scan: true"
+      replace: "test_scan: false"
+
+  - name: Run Insights full malware scan 
+    ansible.builtin.command: sudo insights-client --collector malware-detection
+      
     
 
