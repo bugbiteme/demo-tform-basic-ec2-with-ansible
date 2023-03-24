@@ -32,6 +32,7 @@ data "aws_vpc" "default" {
 
 resource "aws_security_group" "allow_ssh" {
   vpc_id = data.aws_vpc.default.id
+  //vpc_id = "vpc-09ceb2dd77d7f8c77"
 
   ingress {
     from_port   = 22
@@ -90,6 +91,7 @@ data "aws_ami" "rhel" {
 // Configure the EC2 instance itself
 
 resource "aws_instance" "ec2_instance" {
+  //vpc_id = data.aws_vpc.default.id
   count                       = var.instances
   ami                         = data.aws_ami.rhel.id
   associate_public_ip_address = true
